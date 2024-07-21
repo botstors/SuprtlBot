@@ -348,8 +348,8 @@ ${coinPi.aff.limited}
 ` ,
                                                                     parse_mode: "HTML",
                                                                     ...Markup.inlineKeyboard([
-                                                                        Markup.button.url('🌟 اجمع العملات من هنا 🌟',"https://s.click.aliexpress.com/e/_DmAY91D"),
-                                                                        Markup.button.callback("🛒 تخفيض العملات على منتجات السلة 🛒", "cart"),
+                                                                       [ Markup.button.url('🌟 اجمع العملات من هنا 🌟',"https://s.click.aliexpress.com/e/_DmAY91D")],
+                                                                        [Markup.button.callback("🛒 تخفيض العملات على منتجات السلة 🛒", "cart")],
 
                                                                     ])
                                                                 }).then(() => {
