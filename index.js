@@ -505,6 +505,7 @@ ${couponList}
 ` ,
                                                                     parse_mode: "HTML",
                                                                     ...Markup.inlineKeyboard([
+                                                                         [{ text: '🌟 اجمع العملات من هنا 🌟', url: "https://s.click.aliexpress.com/e/_DmAY91D" }],
                                                                         Markup.button.callback("🛒 تخفيض العملات على منتجات السلة 🛒", "cart"),
 
                                                                     ])
