@@ -271,53 +271,67 @@ bot.on('text', async (ctx) => {
                                                     //     });
                                                     aliExpressLib.getData(response_link)
                                                         .then((coinPi) => {
-                                                            user[0].idlink.push(" " + response_link)
-                                                            updateUser(ctx.message.from.id, { links: user[0].links, idlink: user[0].idlink })
-                                                                .then((data, error) => {
+                                                            if (Object.keys(coinPi.info).length === 0) {
+                                                                const messageLink = `
+🌟رابط تخفيض النقاط: 
+${coinPi.aff.points}
 
-                                                                });
-                                                            console.log("coinPi : ", coinPi)
-                                                            // let couponList = "";
+🔥 رابط تخفيض السوبر: 
+${coinPi.aff.super}
 
-                                                            // if (coinPi.info.normal.coupon == "لا يوجد كوبونات ❎") {
-                                                            //     couponList = coinPi.info.normal.coupon;
-                                                            // } else {
-                                                            //     couponList = "";
-                                                            //     coinPi.info.normal.coupon.forEach(coupons => {
-                                                            //         const code = coupons.code;
-                                                            //         const detail = coupons.detail.replaceAll('طلبات تزيد على US ', '');
-                                                            //         const desc = coupons.desc.replace('US ', '');
-                                                            //         couponList += `🎁${desc}/${detail} :${code}\n`;
-                                                            //     });
-                                                            // }
-                                                            let total;
-                                                            if (coinPi.info.points.discount != 'لا توجد نسبة تخفيض بالعملات ❎') {
-                                                                var dise = coinPi.info.points.discount.replace("خصم النقاط ", "");
-                                                                var ods = parseFloat(dise.replace("%", ""));
-                                                                var prices = (parseFloat(coinPi.info.points.discountPrice.replace("US $", "")) / 100) * ods;
-                                                                total = parseFloat(coinPi.info.points.discountPrice.replace("US $", "")) - prices;
-                                                                if (coinPi.info.normal.shipping != "Free Shipping") {
-                                                                    total = total + parseFloat(coinPi.info.normal.shipping);
-                                                                }
+📌رابط العرض المحدود:
+${coinPi.aff.limited}
+
+                    `;
+                                                                ctx.reply(messageLink);
                                                             } else {
-                                                                total = parseFloat(coinPi.info.points.discountPrice.replace("US $", ""));
-                                                                if (coinPi.info.normal.shipping != "Free Shipping") {
-                                                                    total = total + parseFloat(coinPi.info.normal.shipping);
+                                                                user[0].idlink.push(" " + response_link)
+                                                                updateUser(ctx.message.from.id, { links: user[0].links, idlink: user[0].idlink })
+                                                                    .then((data, error) => {
+
+                                                                    });
+                                                                console.log("coinPi : ", coinPi)
+                                                                // let couponList = "";
+
+                                                                // if (coinPi.info.normal.coupon == "لا يوجد كوبونات ❎") {
+                                                                //     couponList = coinPi.info.normal.coupon;
+                                                                // } else {
+                                                                //     couponList = "";
+                                                                //     coinPi.info.normal.coupon.forEach(coupons => {
+                                                                //         const code = coupons.code;
+                                                                //         const detail = coupons.detail.replaceAll('طلبات تزيد على US ', '');
+                                                                //         const desc = coupons.desc.replace('US ', '');
+                                                                //         couponList += `🎁${desc}/${detail} :${code}\n`;
+                                                                //     });
+                                                                // }
+                                                                let total;
+                                                                if (coinPi.info.points.discount != 'لا توجد نسبة تخفيض بالعملات ❎') {
+                                                                    var dise = coinPi.info.points.discount.replace("خصم النقاط ", "");
+                                                                    var ods = parseFloat(dise.replace("%", ""));
+                                                                    var prices = (parseFloat(coinPi.info.points.discountPrice.replace("US $", "")) / 100) * ods;
+                                                                    total = parseFloat(coinPi.info.points.discountPrice.replace("US $", "")) - prices;
+                                                                    if (coinPi.info.normal.shipping != "Free Shipping") {
+                                                                        total = total + parseFloat(coinPi.info.normal.shipping);
+                                                                    }
+                                                                } else {
+                                                                    total = parseFloat(coinPi.info.points.discountPrice.replace("US $", ""));
+                                                                    if (coinPi.info.normal.shipping != "Free Shipping") {
+                                                                        total = total + parseFloat(coinPi.info.normal.shipping);
+                                                                    }
                                                                 }
-                                                            }
 
-                                                            try {
-                                                                total = total.toFixed(2);
-                                                            } catch (e) {
-                                                                total = total;
-                                                            }
-
-
-                                                            ctx.replyWithPhoto({ url: coinPi.info.normal.image },
-                                                                {
+                                                                try {
+                                                                    total = total.toFixed(2);
+                                                                } catch (e) {
+                                                                    total = total;
+                                                                }
 
 
-                                                                    caption: `
+                                                                ctx.replyWithPhoto({ url: coinPi.info.normal.image },
+                                                                    {
+
+
+                                                                        caption: `
 <b>>-----------« تخفيض الاسعار 🎉 »>-----------</b>
 ${coinPi.info.normal.name}
 
@@ -346,29 +360,31 @@ ${coinPi.aff.super}
 ${coinPi.aff.limited}
 <b>----------- | ✨ الكوبونات ✨ | -----------</b>
 ` ,
-                                                                    parse_mode: "HTML",
-                                                                    ...Markup.inlineKeyboard([
-                                                                        [Markup.button.url('🌟 اجمع العملات من هنا 🌟', "https://s.click.aliexpress.com/e/_DmAY91D")],
-                                                                        [Markup.button.callback("🛒 تخفيض العملات على منتجات السلة 🛒", "cart")],
+                                                                        parse_mode: "HTML",
+                                                                        ...Markup.inlineKeyboard([
+                                                                            [Markup.button.url('🌟 اجمع العملات من هنا 🌟', "https://s.click.aliexpress.com/e/_DmAY91D")],
+                                                                            [Markup.button.callback("🛒 تخفيض العملات على منتجات السلة 🛒", "cart")],
 
-                                                                    ])
-                                                                }).then(() => {
-                                                                    ctx.deleteMessage(message.message_id)
+                                                                        ])
+                                                                    }).then(() => {
+                                                                        ctx.deleteMessage(message.message_id)
 
-                                                                })
+                                                                    })
+                                                            }
 
-
-                                                        });//
+                                                            });//
+                                                
                                                 } else {
                                                     ctx.reply('الرابط غير صالح')
 
                                                 }
 
-
+                                            
                                             })
+                                        
                                         }
                                     })
-
+                            
                                     .catch(error => {
                                         console.error(error.message);
                                     });////
@@ -531,8 +547,8 @@ ${couponList}
                                                                         ctx.deleteMessage(message.message_id)
 
                                                                     })
-
                                                             }
+
                                                         });
 
 
